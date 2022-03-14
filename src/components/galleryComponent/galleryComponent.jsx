@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ImageList, ImageListItem } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import styled from "styled-components";
-import { photos } from "../../photos/photos";
 import CloseIcon from "@mui/icons-material/Close";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/firebaseApp";
 
 const StyledModal = styled(Modal)`
   background: #00000080;
@@ -57,8 +58,22 @@ const StyledCloseIcon = styled(CloseIcon)`
 `;
 
 export default function GalleryComponent() {
+  const [photos, setPhotos] = useState([]);
+  const [photosAreLoaded, setPhotosAreLoaded] = useState(false);
   const [modalImage, setModalImage] = useState(0);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    const querySnapshot = await getDocs(collection(db, "photos"));
+    querySnapshot.forEach((doc) => {
+      setPhotos((photos) => [...photos, { id: doc.id, url: doc.data().url }]);
+    });
+    setPhotosAreLoaded(true);
+  }
 
   const handleOpen = (index) => {
     setModalImage(index);
@@ -73,23 +88,24 @@ export default function GalleryComponent() {
   return (
     <div>
       <ImageList variant="masonry" cols={3} gap={8}>
-        {photos.map((item, index) => (
-          <ImageListItem key={item.img}>
-            <img
-              src={`${item.img}?w=248&fit=crop&auto=format`}
-              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.title}
-              loading="lazy"
-              onClick={() => handleOpen(index)}
-            />
-          </ImageListItem>
-        ))}
+        {photosAreLoaded &&
+          photos.map((item, index) => (
+            <ImageListItem key={item.id}>
+              <img
+                src={`${item.url}?w=248&fit=crop&auto=format`}
+                srcSet={`${item.url}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                /*alt={item.title}*/
+                loading="lazy"
+                onClick={() => handleOpen(index)}
+              />
+            </ImageListItem>
+          ))}
       </ImageList>
       <StyledModal open={open} onClose={handleClose}>
         <>
           <StyledCloseIcon onClick={handleClose} />
           <ModalContent>
-            <Image src={photos[modalImage].img} />
+            {photosAreLoaded && <Image src={photos[modalImage].url} />}
           </ModalContent>
           <ModalTextContainer>
             <h3>Nombre Lorem Ipsum</h3>
