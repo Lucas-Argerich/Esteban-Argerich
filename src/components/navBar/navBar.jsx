@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const Nav = styled.nav`
-  margin: 15px 40px;
+  padding: 15px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,7 +41,9 @@ const StyledLink = styled.li`
 export default function NavBar() {
   return (
     <Nav>
-      <Logo src={OwnerSign} alt="Esteban Argerich Sign as Header Icon" />
+      <Link to="/">
+        <Logo src={OwnerSign} alt="Esteban Argerich Sign as Header Icon" />
+      </Link>
       <Wrapper>
         <StyledLink>
           <Link to="/"> Home </Link>
