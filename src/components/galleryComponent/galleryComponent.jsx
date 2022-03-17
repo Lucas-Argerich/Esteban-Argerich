@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ImageList, ImageListItem } from "@mui/material";
+import { ImageList, ImageListItem, Skeleton } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
@@ -88,18 +88,26 @@ export default function GalleryComponent() {
   return (
     <div>
       <ImageList variant="masonry" cols={3} gap={8}>
-        {photosAreLoaded &&
-          photos.map((item, index) => (
-            <ImageListItem key={item.id}>
-              <img
-                src={`${item.url}?w=248&fit=crop&auto=format`}
-                srcSet={`${item.url}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                /*alt={item.title}*/
-                loading="lazy"
-                onClick={() => handleOpen(index)}
+        {photosAreLoaded
+          ? photos.map((item, index) => (
+              <ImageListItem key={item.id}>
+                <img
+                  src={`${item.url}?w=248&fit=crop&auto=format`}
+                  srcSet={`${item.url}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                  /*alt={item.title}*/
+                  loading="lazy"
+                  onClick={() => handleOpen(index)}
+                />
+              </ImageListItem>
+            ))
+          : Array.from({ length: 10 }, (_, i) => (
+              <Skeleton
+                variant="rectangular"
+                width={"fill-available"}
+                height={300}
+                style={{ marginBottom: "8px" }}
               />
-            </ImageListItem>
-          ))}
+            ))}
       </ImageList>
       <StyledModal open={open} onClose={handleClose}>
         <>
