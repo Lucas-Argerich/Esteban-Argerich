@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { ImageList, ImageListItem, Skeleton } from "@mui/material";
+import { ImageList, Skeleton } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase/firebaseApp";
+import GalleryItemComponent from "../galleryItemComponent/galleryItemComponent";
 
 const StyledModal = styled(Modal)`
   background: #00000080;
@@ -59,7 +60,7 @@ const StyledCloseIcon = styled(CloseIcon)`
 
 export default function GalleryComponent() {
   const [photos, setPhotos] = useState([]);
-  const [photosAreLoaded, setPhotosAreLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [modalImage, setModalImage] = useState(0);
   const [open, setOpen] = useState(false);
 
@@ -72,7 +73,7 @@ export default function GalleryComponent() {
     querySnapshot.forEach((doc) => {
       setPhotos((photos) => [...photos, { id: doc.id, url: doc.data().url }]);
     });
-    setPhotosAreLoaded(true);
+    setLoading(false);
   }
 
   const handleOpen = (index) => {
@@ -88,32 +89,29 @@ export default function GalleryComponent() {
   return (
     <div>
       <ImageList variant="masonry" cols={3} gap={8}>
-        {photosAreLoaded
-          ? photos.map((item, index) => (
-              <ImageListItem key={item.id}>
-                <img
-                  src={`${item.url}?w=248&fit=crop&auto=format`}
-                  srcSet={`${item.url}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                  /*alt={item.title}*/
-                  loading="lazy"
-                  onClick={() => handleOpen(index)}
-                />
-              </ImageListItem>
-            ))
-          : Array.from({ length: 10 }, (_, i) => (
-              <Skeleton
-                variant="rectangular"
-                width={"fill-available"}
-                height={300}
-                style={{ marginBottom: "8px" }}
-              />
-            ))}
+        {(loading ? Array.from(new Array(20)) : photos).map((item, index) =>
+          item ? (
+            <GalleryItemComponent
+              key={item.id}
+              item={item}
+              index={index}
+              handleOpen={handleOpen}
+            />
+          ) : (
+            <Skeleton
+              variant="rectangular"
+              width={"fill-available"}
+              height={300}
+              style={{ marginBottom: 8 }}
+            />
+          )
+        )}
       </ImageList>
       <StyledModal open={open} onClose={handleClose}>
         <>
           <StyledCloseIcon onClick={handleClose} />
           <ModalContent>
-            {photosAreLoaded && <Image src={photos[modalImage].url} />}
+            {!loading && <Image src={photos[modalImage].url} />}
           </ModalContent>
           <ModalTextContainer>
             <h3>Nombre Lorem Ipsum</h3>
