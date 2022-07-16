@@ -3,6 +3,7 @@ import OwnerSign from "./assets/Esteban-Argerich-black-high-res.png";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useMediaQuery } from "@mui/material";
 
 const Header = styled.header`
   padding: 15px 40px;
@@ -83,7 +84,8 @@ const StyledLink = styled(Link)`
 `;
 
 export default function NavBar() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const lg = useMediaQuery("(min-width: 796px)");
 
   return (
     <Header>
@@ -94,7 +96,7 @@ export default function NavBar() {
         <Hamburger onClick={() => setOpen(!open)}>
           <MenuIcon />
         </Hamburger>
-        <Wrapper style={open ? { minWidth: "150px" } : { width: "0" }}>
+        <Wrapper style={open || lg ? { minWidth: "150px" } : { width: "0" }}>
           <StyledListItem>
             <StyledLink to="/"> Home </StyledLink>
           </StyledListItem>
