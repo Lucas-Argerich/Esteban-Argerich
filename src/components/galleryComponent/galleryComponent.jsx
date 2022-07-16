@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ImageList, Skeleton } from "@mui/material";
 import Modal from "@mui/material/Modal";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import { collection, getDocs } from "firebase/firestore";
@@ -8,7 +9,7 @@ import { db } from "../../firebase/firebaseApp";
 import GalleryItemComponent from "../galleryItemComponent/galleryItemComponent";
 
 const StyledModal = styled(Modal)`
-  background: #00000080;
+  background: #000000cc;
 `;
 
 const ModalContent = styled.div`
@@ -63,6 +64,8 @@ export default function GalleryComponent() {
   const [loading, setLoading] = useState(true);
   const [modalImage, setModalImage] = useState(0);
   const [open, setOpen] = useState(false);
+  const sm = useMediaQuery("(min-width: 427px)");
+  const md = useMediaQuery("(min-width: 769px)");
 
   useEffect(() => {
     fetchData();
@@ -86,9 +89,11 @@ export default function GalleryComponent() {
     setOpen(false);
   };
 
+  const columns = useMemo(() => (md ? 3 : sm ? 2 : 1), [sm, md]);
+
   return (
     <div>
-      <ImageList variant="masonry" cols={3} gap={8}>
+      <ImageList variant="masonry" cols={columns} gap={8}>
         {(loading ? Array.from(new Array(20)) : photos).map((item, index) =>
           item ? (
             <GalleryItemComponent
@@ -113,10 +118,10 @@ export default function GalleryComponent() {
           <ModalContent>
             {!loading && <Image src={photos[modalImage].url} />}
           </ModalContent>
-          <ModalTextContainer>
+          {/* <ModalTextContainer>
             <h3>Nombre Lorem Ipsum</h3>
             <h4>Ubicación Lorem Ipsum</h4>
-          </ModalTextContainer>
+          </ModalTextContainer> */}
         </>
       </StyledModal>
     </div>
