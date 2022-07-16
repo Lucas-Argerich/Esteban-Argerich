@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import OwnerSign from "./assets/Esteban-Argerich-black-high-res.png";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
 
-const Nav = styled.nav`
+const Header = styled.header`
   padding: 15px 40px;
   display: flex;
   justify-content: space-between;
@@ -14,15 +15,52 @@ const Logo = styled.img`
   height: 100px;
 `;
 
+const Nav = styled.nav`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+`;
+
 const Wrapper = styled.ul`
   list-style-type: none;
   display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 30px;
+  transition: 200ms;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    position: static;
+  }
 `;
 
-const StyledLink = styled.li`
+const Hamburger = styled.div`
+  display: flex;
+  justify-content: right;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+`;
+
+const StyledListItem = styled.li`
   font-weight: 700;
   font-size: 1.2rem;
-  margin: 0 50px;
+  text-align: right;
+  margin-top: 5px;
+
+  @media (min-width: 768px) {
+    text-align: left;
+    margin: 0 25px;
+  }
 
   &::after {
     content: "";
@@ -31,6 +69,7 @@ const StyledLink = styled.li`
     background: #363636;
     display: block;
     transition: 200ms;
+    margin-left: auto;
   }
 
   &:hover::after {
@@ -38,23 +77,35 @@ const StyledLink = styled.li`
   }
 `;
 
+const StyledLink = styled(Link)`
+  width: 150px;
+  white-space: nowrap;
+`;
+
 export default function NavBar() {
+  const [open, setOpen] = useState(true);
+
   return (
-    <Nav>
+    <Header>
       <Link to="/">
         <Logo src={OwnerSign} alt="Esteban Argerich Sign as Header Icon" />
       </Link>
-      <Wrapper>
-        <StyledLink>
-          <Link to="/"> Home </Link>
-        </StyledLink>
-        <StyledLink>
-          <Link to="/gallery"> Gallery </Link>
-        </StyledLink>
-        <StyledLink>
-          <Link to="/about-me"> About Me </Link>
-        </StyledLink>
-      </Wrapper>
-    </Nav>
+      <Nav>
+        <Hamburger onClick={() => setOpen(!open)}>
+          <MenuIcon />
+        </Hamburger>
+        <Wrapper style={open ? { minWidth: "150px" } : { width: "0" }}>
+          <StyledListItem>
+            <StyledLink to="/"> Home </StyledLink>
+          </StyledListItem>
+          <StyledListItem>
+            <StyledLink to="/gallery"> Galería </StyledLink>
+          </StyledListItem>
+          <StyledListItem>
+            <StyledLink to="/about-me"> Sobre mi </StyledLink>
+          </StyledListItem>
+        </Wrapper>
+      </Nav>
+    </Header>
   );
 }
