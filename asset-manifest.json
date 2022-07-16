@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9e5f512a.css",
+    "main.js": "/static/js/main.ddc50537.js",
+    "static/media/backgroundOne.jpg": "/static/media/backgroundOne.63d4ec286041eecc209b.jpg",
+    "static/media/backgroundTwo.jpg": "/static/media/backgroundTwo.9751c1e94c8c8f95f4e3.jpg",
+    "static/media/Esteban-Argerich-black-high-res.png": "/static/media/Esteban-Argerich-black-high-res.0cb4f096f26524afb5d0.png",
+    "index.html": "/index.html",
+    "main.9e5f512a.css.map": "/static/css/main.9e5f512a.css.map",
+    "main.ddc50537.js.map": "/static/js/main.ddc50537.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9e5f512a.css",
+    "static/js/main.ddc50537.js"
+  ]
+}
