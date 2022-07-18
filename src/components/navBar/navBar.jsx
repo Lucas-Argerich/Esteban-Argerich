@@ -22,7 +22,7 @@ const Nav = styled.nav`
   justify-content: center;
   position: relative;
 
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     flex-direction: row;
   }
 `;
@@ -37,7 +37,7 @@ const Wrapper = styled.ul`
   top: 30px;
   transition: 200ms;
 
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     flex-direction: row;
     position: static;
   }
@@ -47,7 +47,7 @@ const Hamburger = styled.div`
   display: flex;
   justify-content: right;
 
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     display: none;
   }
 `;
@@ -58,7 +58,7 @@ const StyledListItem = styled.li`
   text-align: right;
   margin-top: 5px;
 
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     text-align: left;
     margin: 0 25px;
   }
@@ -85,7 +85,7 @@ const StyledLink = styled(Link)`
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
-  const lg = useMediaQuery("(min-width: 796px)");
+  const lg = useMediaQuery("(min-width: 769px)");
 
   return (
     <Header>
