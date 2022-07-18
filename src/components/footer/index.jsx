@@ -39,7 +39,7 @@ export default function Footer() {
         <Facebook />
         <span>Esteban Argerich</span>
       </Media>
-      <Media href="" target="_blank">
+      <Media href="https://www.instagram.com/argerichesteban/" target="_blank">
         <Instagram />
         <span>@argerichesteban</span>
       </Media>
