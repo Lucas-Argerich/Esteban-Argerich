@@ -13,7 +13,10 @@ const Header = styled.header`
 `;
 
 const Logo = styled.img`
-  height: 100px;
+  height: 80px;
+  @media (min-width: 769px) {
+    height: 100px;
+  }
 `;
 
 const Nav = styled.nav`
@@ -54,12 +57,13 @@ const Hamburger = styled.div`
 
 const StyledListItem = styled.li`
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1rem;
   text-align: right;
   margin-top: 5px;
 
   @media (min-width: 769px) {
     text-align: left;
+    font-size: 1.2rem;
     margin: 0 25px;
   }
 
@@ -96,7 +100,7 @@ export default function NavBar() {
         <Hamburger onClick={() => setOpen(!open)}>
           <MenuIcon />
         </Hamburger>
-        <Wrapper style={open || lg ? { minWidth: "150px" } : { width: "0" }}>
+        <Wrapper style={open || lg ? { minWidth: "100px" } : { width: "0" }}>
           <StyledListItem>
             <StyledLink to="/"> Home </StyledLink>
           </StyledListItem>
