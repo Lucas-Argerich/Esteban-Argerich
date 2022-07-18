@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import Footer from "./components/footer";
 import NavBar from "./components/navBar/navBar";
 import AboutMe from "./pages/aboutMe/aboutMe";
 import Gallery from "./pages/gallery/gallery";
@@ -21,6 +22,7 @@ export default function App() {
           }
         />
       </Routes>
+      <Footer />
     </div>
   );
 }

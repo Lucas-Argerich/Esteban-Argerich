@@ -51,6 +51,7 @@ const Two = styled.div``;
 
 const Three = styled.div`
   margin: 30px 0;
+  padding-bottom: 30px;
 
   @media (min-width: 769px) {
     display: flex;
