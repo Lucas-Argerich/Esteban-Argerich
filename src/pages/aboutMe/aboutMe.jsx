@@ -57,7 +57,11 @@ const Three = styled.div`
   }
 
   p {
-    margin: 0 0 20px 20px;
+    margin: 20px 0 20px 0px;
+
+    @media (min-width: 769px) {
+      margin: 0 0 20px 20px;
+    }
   }
 `;
 
