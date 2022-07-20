@@ -11,7 +11,7 @@ const Main = styled.main`
   @media (min-width: 769px) {
     background: url(${HorizontalBackground}) no-repeat;
     background-size: calc(80vw);
-    background-position: left top;
+    background-position: left center;
   } ;
 `;
 
