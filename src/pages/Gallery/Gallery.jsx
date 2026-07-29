@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { getPhotos, getCategories } from '../../services/galleryService';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import CategoryFilter from '../../components/gallery/CategoryFilter/CategoryFilter';
@@ -8,28 +8,29 @@ import styles from './Gallery.module.css';
 
 export default function Gallery() {
   usePageTitle('Galería');
-  const [photos, setPhotos] = useState([]);
+  const [allPhotos, setAllPhotos] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  // Fetch categories once on mount
+  // Fetch all photos and categories once on mount
   useEffect(() => {
-    getCategories()
-      .then(setCategories)
-      .catch((err) => console.error('Failed to load categories:', err));
+    Promise.all([getPhotos(), getCategories()])
+      .then(([photosData, categoriesData]) => {
+        setAllPhotos(photosData);
+        setCategories(categoriesData);
+      })
+      .catch((err) => console.error('Failed to load gallery:', err))
+      .finally(() => setLoading(false));
   }, []);
 
-  // Fetch photos when activeCategory changes
-  useEffect(() => {
-    setLoading(true);
-    getPhotos(activeCategory)
-      .then(setPhotos)
-      .catch((err) => console.error('Failed to load photos:', err))
-      .finally(() => setLoading(false));
-  }, [activeCategory]);
+  // Filter client-side — instant, no re-fetch
+  const photos = useMemo(() => {
+    if (!activeCategory) return allPhotos;
+    return allPhotos.filter((p) => p.category === activeCategory);
+  }, [allPhotos, activeCategory]);
 
   const handleCategoryChange = useCallback((category) => {
     setActiveCategory(category);
