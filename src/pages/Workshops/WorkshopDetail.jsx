@@ -175,11 +175,14 @@ export default function WorkshopDetail() {
         <p className={styles.description}>{workshop.description}</p>
 
         {/* Gallery images and videos */}
-        {workshop.images && workshop.images.length > 0 && (
+        {workshop.images && workshop.images.length > 0 && (() => {
+          const sortedMedia = [...workshop.images].sort((a, b) => (a.type === 'video' ? -1 : 1) - (b.type === 'video' ? -1 : 1));
+          return (
+          <>
           <section className={styles.gallery}>
             <h2 className={styles.galleryTitle}>Galería</h2>
             <div className={styles.galleryGrid}>
-              {workshop.images.map((media, idx) => (
+              {sortedMedia.map((media, idx) => (
                 <div
                   key={idx}
                   className={styles.galleryItem}
@@ -214,16 +217,15 @@ export default function WorkshopDetail() {
               ))}
             </div>
           </section>
-        )}
 
         {/* Lightbox (images and videos) */}
-        {lightboxIndex >= 0 && workshop.images && (
+        {lightboxIndex >= 0 && (
           <div
             className={styles.lightboxOverlay}
             onClick={() => setLightboxIndex(-1)}
             onKeyDown={(e) => {
               if (e.key === 'Escape') setLightboxIndex(-1);
-              if (e.key === 'ArrowRight' && lightboxIndex < workshop.images.length - 1) setLightboxIndex(lightboxIndex + 1);
+              if (e.key === 'ArrowRight' && lightboxIndex < sortedMedia.length - 1) setLightboxIndex(lightboxIndex + 1);
               if (e.key === 'ArrowLeft' && lightboxIndex > 0) setLightboxIndex(lightboxIndex - 1);
             }}
             tabIndex={0}
@@ -249,10 +251,10 @@ export default function WorkshopDetail() {
               </button>
             )}
 
-            {workshop.images[lightboxIndex]?.type === 'video' ? (
+            {sortedMedia[lightboxIndex]?.type === 'video' ? (
               <video
                 key={lightboxIndex}
-                src={workshop.images[lightboxIndex].url}
+                src={sortedMedia[lightboxIndex].url}
                 className={styles.lightboxVideo}
                 controls
                 autoPlay
@@ -260,14 +262,14 @@ export default function WorkshopDetail() {
               />
             ) : (
               <img
-                src={workshop.images[lightboxIndex].url}
+                src={sortedMedia[lightboxIndex].url}
                 alt={`${workshop.title} - imagen ${lightboxIndex + 1}`}
                 className={styles.lightboxImage}
                 onClick={(e) => e.stopPropagation()}
               />
             )}
 
-            {lightboxIndex < workshop.images.length - 1 && (
+            {lightboxIndex < sortedMedia.length - 1 && (
               <button
                 className={styles.lightboxNext}
                 onClick={(e) => { e.stopPropagation(); setLightboxIndex(lightboxIndex + 1); }}
@@ -278,6 +280,9 @@ export default function WorkshopDetail() {
             )}
           </div>
         )}
+        </>
+          );
+        })()}
 
         {/* Contact form */}
         <section className={styles.contactSection}>
