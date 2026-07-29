@@ -21,10 +21,10 @@ function formatDate(date) {
 }
 
 export default function WorkshopCard({ workshop }) {
-  const { id, title, description, date, location, coverImageUrl } = workshop;
+  const { slug, id, title, description, date, location, coverImageUrl } = workshop;
 
   return (
-    <Link to={`/workshops/${id}`} className={styles.cardLink}>
+    <Link to={`/workshops/${slug || id}`} className={styles.cardLink}>
       <article className={styles.card}>
         {coverImageUrl && (
           <img

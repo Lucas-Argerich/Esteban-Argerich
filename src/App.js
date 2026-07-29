@@ -57,7 +57,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/workshops" element={<Workshops />} />
-            <Route path="/workshops/:id" element={<WorkshopDetail />} />
+            <Route path="/workshops/:slug" element={<WorkshopDetail />} />
             <Route path="/about" element={<About />} />
 
             {/* Admin routes */}

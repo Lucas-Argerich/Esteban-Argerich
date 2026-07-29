@@ -6,6 +6,17 @@ import { getWorkshops } from '../../../services/workshopService';
 import { validateImageFile } from '../../../utils/fileValidation';
 import styles from './WorkshopManager.module.css';
 
+function generateSlug(title) {
+  return title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // remove accents
+    .replace(/[^a-z0-9\s-]/g, '')    // remove special chars
+    .trim()
+    .replace(/\s+/g, '-')            // spaces to hyphens
+    .replace(/-+/g, '-');            // collapse multiple hyphens
+}
+
 const INITIAL_FORM = {
   title: '',
   description: '',
@@ -264,11 +275,15 @@ export default function WorkshopManager() {
       workshopData.images = [...existingImages, ...newImages];
 
       if (editingWorkshop) {
-        // Update existing
+        // Update existing — regenerate slug if title changed
+        if (formData.title.trim() !== editingWorkshop.title) {
+          workshopData.slug = generateSlug(formData.title.trim());
+        }
         const docRef = doc(db, 'workshops', editingWorkshop.id);
         await updateDoc(docRef, workshopData);
       } else {
         // Create new
+        workshopData.slug = generateSlug(formData.title.trim());
         workshopData.active = true;
         workshopData.createdAt = Timestamp.now();
         await addDoc(collection(db, 'workshops'), workshopData);

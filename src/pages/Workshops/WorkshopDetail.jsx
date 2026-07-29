@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../../services/firebase';
-import { getWorkshopById } from '../../services/workshopService';
+import { getWorkshopBySlug, getWorkshopById } from '../../services/workshopService';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './WorkshopDetail.module.css';
 
@@ -18,7 +18,7 @@ function formatDate(date) {
 }
 
 export default function WorkshopDetail() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [workshop, setWorkshop] = useState(null);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({ name: '', phone: '', message: 'Hola, me interesa este taller. ¿Podrías darme más información?' });
@@ -30,7 +30,11 @@ export default function WorkshopDetail() {
   useEffect(() => {
     async function fetchWorkshop() {
       try {
-        const data = await getWorkshopById(id);
+        // Try slug first, fall back to ID for old workshops without slugs
+        let data = await getWorkshopBySlug(slug);
+        if (!data) {
+          data = await getWorkshopById(slug);
+        }
         setWorkshop(data);
       } catch (err) {
         console.error('Error fetching workshop:', err);
@@ -39,7 +43,7 @@ export default function WorkshopDetail() {
       }
     }
     fetchWorkshop();
-  }, [id]);
+  }, [slug]);
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -60,7 +64,7 @@ export default function WorkshopDetail() {
       name: formData.name.trim(),
       phone: formData.phone.trim(),
       message: formData.message.trim(),
-      workshopId: id,
+      workshopId: workshop?.id || '',
       workshopTitle: workshop?.title || '',
       createdAt: Timestamp.now(),
     };

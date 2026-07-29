@@ -58,3 +58,24 @@ export async function getWorkshopById(id) {
     ...docSnap.data(),
   };
 }
+
+/**
+ * Fetches a single workshop by its URL slug.
+ * @param {string} slug - The workshop slug
+ * @returns {Promise<Object|null>} The workshop object with id, or null if not found
+ */
+export async function getWorkshopBySlug(slug) {
+  const workshopsRef = collection(db, WORKSHOPS_COLLECTION);
+  const q = query(workshopsRef, where('slug', '==', slug));
+  const snapshot = await getDocs(q);
+
+  if (snapshot.empty) {
+    return null;
+  }
+
+  const docSnap = snapshot.docs[0];
+  return {
+    id: docSnap.id,
+    ...docSnap.data(),
+  };
+}
