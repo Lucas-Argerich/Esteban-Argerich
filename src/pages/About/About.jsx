@@ -50,10 +50,10 @@ export default function About() {
             <h2 className={styles.contactHeading}>Contacto</h2>
 
             <a
-              href="mailto:contacto@estebanargerich.com"
+              href="mailto:esteban@argerich.ar"
               className={styles.contactEmail}
             >
-              contacto@estebanargerich.com
+              esteban@argerich.ar
             </a>
 
             <ul className={styles.socialLinks}>
