@@ -33,11 +33,18 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(
-    135deg,
-    var(--color-background, #fafafa) 0%,
-    var(--color-secondary, #4a4a4a) 100%
+    90deg,
+    var(--color-background, #fafafa) 25%,
+    #e8e8e8 50%,
+    var(--color-background, #fafafa) 75%
   );
-  opacity: 0.15;
+  background-size: 200% 100%;
+  animation: imageShimmer 1.5s infinite;
+}
+
+@keyframes imageShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* Main image — fades in over the placeholder */

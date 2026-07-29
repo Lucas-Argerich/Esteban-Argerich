@@ -22,10 +22,10 @@ export default function OptimizedImage({
     setIsLoaded(true);
   }, []);
 
-  // Maintain aspect ratio if width/height provided
+  // Maintain aspect ratio if width/height provided, default to 4:3 if not
   const containerStyle = width && height
     ? { aspectRatio: `${width} / ${height}` }
-    : undefined;
+    : { aspectRatio: '4 / 3' };
 
   return (
     <div
