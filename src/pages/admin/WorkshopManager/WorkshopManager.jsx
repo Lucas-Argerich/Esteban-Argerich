@@ -9,7 +9,7 @@ import styles from './WorkshopManager.module.css';
 const INITIAL_FORM = {
   title: '',
   description: '',
-  date: '',
+  dates: [''],
   location: '',
 };
 
@@ -47,6 +47,25 @@ export default function WorkshopManager() {
   function handleInputChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleDateChange(index, value) {
+    setFormData((prev) => {
+      const newDates = [...prev.dates];
+      newDates[index] = value;
+      return { ...prev, dates: newDates };
+    });
+  }
+
+  function addDate() {
+    setFormData((prev) => ({ ...prev, dates: [...prev.dates, ''] }));
+  }
+
+  function removeDate(index) {
+    setFormData((prev) => {
+      const newDates = prev.dates.filter((_, i) => i !== index);
+      return { ...prev, dates: newDates.length > 0 ? newDates : [''] };
+    });
   }
 
   function handleFileChange(e) {
@@ -99,13 +118,23 @@ export default function WorkshopManager() {
 
   function openEditForm(workshop) {
     setEditingWorkshop(workshop);
-    const dateValue = workshop.date?.toDate
-      ? workshop.date.toDate().toISOString().split('T')[0]
-      : '';
+    // Convert dates array or single date to string array
+    let dates = [''];
+    if (workshop.dates && workshop.dates.length > 0) {
+      dates = workshop.dates.map((d) =>
+        typeof d?.toDate === 'function' ? d.toDate().toISOString().split('T')[0] : ''
+      ).filter(Boolean);
+      if (dates.length === 0) dates = [''];
+    } else if (workshop.date) {
+      const dateValue = typeof workshop.date?.toDate === 'function'
+        ? workshop.date.toDate().toISOString().split('T')[0]
+        : '';
+      dates = dateValue ? [dateValue] : [''];
+    }
     setFormData({
       title: workshop.title || '',
       description: workshop.description || '',
-      date: dateValue,
+      dates,
       location: workshop.location || '',
     });
     setCoverFile(null);
@@ -133,8 +162,9 @@ export default function WorkshopManager() {
       setError('El título es obligatorio.');
       return;
     }
-    if (!formData.date) {
-      setError('La fecha es obligatoria.');
+    const validDates = formData.dates.filter((d) => d.trim() !== '');
+    if (validDates.length === 0) {
+      setError('Al menos una fecha es obligatoria.');
       return;
     }
 
@@ -174,12 +204,23 @@ export default function WorkshopManager() {
       const workshopData = {
         title: formData.title.trim(),
         description: formData.description.trim(),
-        date: Timestamp.fromDate(new Date(formData.date + 'T00:00:00')),
         location: formData.location.trim(),
         coverImageUrl,
         coverImagePath,
         updatedAt: Timestamp.now(),
       };
+
+      // Save all dates as Timestamps array
+      const validDates = formData.dates.filter((d) => d.trim() !== '');
+      const dateTimestamps = validDates
+        .map((d) => Timestamp.fromDate(new Date(d + 'T00:00:00')))
+        .sort((a, b) => a.seconds - b.seconds);
+      workshopData.dates = dateTimestamps;
+
+      // Set `date` to the next upcoming date (or the last one if all past)
+      const now = new Date();
+      const upcomingDate = dateTimestamps.find((ts) => ts.toDate() >= now);
+      workshopData.date = upcomingDate || dateTimestamps[dateTimestamps.length - 1];
 
       // Upload gallery images
       const existingImages = editingWorkshop?.images || [];
@@ -268,6 +309,36 @@ export default function WorkshopManager() {
     });
   }
 
+  function getNextDate(workshop) {
+    if (workshop.dates && workshop.dates.length > 0) {
+      const now = new Date();
+      const upcoming = workshop.dates
+        .filter((d) => d?.toDate)
+        .map((d) => d.toDate())
+        .sort((a, b) => a - b)
+        .find((d) => d >= now);
+      if (upcoming) return upcoming;
+      // All past: show the most recent one
+      const sorted = workshop.dates
+        .filter((d) => d?.toDate)
+        .map((d) => d.toDate())
+        .sort((a, b) => b - a);
+      return sorted[0] || null;
+    }
+    return workshop.date?.toDate ? workshop.date.toDate() : null;
+  }
+
+  function formatNextDate(workshop) {
+    const d = getNextDate(workshop);
+    if (!d) return '—';
+    return d.toLocaleDateString('es-AR', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function getDateCount(workshop) {
+    if (workshop.dates && workshop.dates.length > 1) return workshop.dates.length;
+    return 0;
+  }
+
   async function handleToggleActive(workshop) {
     try {
       const docRef = doc(db, 'workshops', workshop.id);
@@ -276,6 +347,29 @@ export default function WorkshopManager() {
     } catch (err) {
       console.error('Error toggling active:', err);
       setError('Error al cambiar el estado del taller.');
+    }
+  }
+
+  async function handleRemoveImage(imageIndex) {
+    if (!editingWorkshop) return;
+    const confirmed = window.confirm('¿Eliminar esta imagen?');
+    if (!confirmed) return;
+
+    const img = editingWorkshop.images[imageIndex];
+    try {
+      // Delete from Storage
+      if (img.path) {
+        try { await deleteFile(img.path); } catch { /* continue */ }
+      }
+      // Update Firestore — remove from array
+      const updatedImages = editingWorkshop.images.filter((_, i) => i !== imageIndex);
+      const docRef = doc(db, 'workshops', editingWorkshop.id);
+      await updateDoc(docRef, { images: updatedImages, updatedAt: Timestamp.now() });
+      // Update local state
+      setEditingWorkshop({ ...editingWorkshop, images: updatedImages });
+    } catch (err) {
+      console.error('Error removing image:', err);
+      setError('Error al eliminar la imagen.');
     }
   }
 
@@ -342,16 +436,36 @@ export default function WorkshopManager() {
             placeholder="Descripción del taller"
           />
 
-          <label className={styles.label} htmlFor="wm-date">Fecha</label>
-          <input
-            id="wm-date"
-            className={styles.input}
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleInputChange}
-            required
-          />
+          <label className={styles.label}>Fechas</label>
+          {formData.dates.map((dateVal, idx) => (
+            <div key={idx} className={styles.dateRow}>
+              <input
+                className={styles.input}
+                type="date"
+                value={dateVal}
+                onChange={(e) => handleDateChange(idx, e.target.value)}
+                required={idx === 0}
+              />
+              {formData.dates.length > 1 && (
+                <button
+                  type="button"
+                  className={styles.buttonDanger}
+                  onClick={() => removeDate(idx)}
+                  style={{ padding: '6px 10px' }}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            className={styles.buttonSecondary}
+            onClick={addDate}
+            style={{ alignSelf: 'flex-start', marginTop: '4px' }}
+          >
+            + Agregar fecha
+          </button>
 
           <label className={styles.label} htmlFor="wm-location">Ubicación</label>
           <input
@@ -395,7 +509,17 @@ export default function WorkshopManager() {
               <p className={styles.label}>Imágenes actuales ({editingWorkshop.images.length}):</p>
               <div className={styles.imageThumbs}>
                 {editingWorkshop.images.map((img, idx) => (
-                  <img key={idx} src={img.url} alt={`Imagen ${idx + 1}`} className={styles.thumb} />
+                  <div key={idx} className={styles.thumbWrapper}>
+                    <img src={img.url} alt={`Imagen ${idx + 1}`} className={styles.thumb} />
+                    <button
+                      type="button"
+                      className={styles.thumbRemove}
+                      onClick={() => handleRemoveImage(idx)}
+                      title="Eliminar imagen"
+                    >
+                      ✕
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>
@@ -472,7 +596,9 @@ export default function WorkshopManager() {
                   </button>
                 </p>
                 <p className={styles.workshopMeta}>
-                  {formatDate(workshop.date)} — {workshop.location || 'Sin ubicación'}
+                  {formatNextDate(workshop)}
+                  {getDateCount(workshop) > 0 && ` (+${getDateCount(workshop) - 1} más)`}
+                  {' — '}{workshop.location || 'Sin ubicación'}
                 </p>
               </div>
               <div className={styles.actions}>

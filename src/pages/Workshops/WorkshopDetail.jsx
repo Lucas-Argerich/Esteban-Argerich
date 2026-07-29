@@ -22,6 +22,7 @@ export default function WorkshopDetail() {
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({ name: '', phone: '', message: 'Hola, me interesa este taller. ¿Podrías darme más información?' });
   const [formStatus, setFormStatus] = useState(null); // 'success' | 'error' | null
+  const [lightboxIndex, setLightboxIndex] = useState(-1); // -1 = closed
 
   useEffect(() => {
     async function fetchWorkshop() {
@@ -117,9 +118,28 @@ export default function WorkshopDetail() {
         <h1 className={styles.title}>{workshop.title}</h1>
 
         <div className={styles.meta}>
-          {workshop.date && (
+          {workshop.dates && workshop.dates.length > 0 ? (
+            <div className={styles.metaDates}>
+              <span className={styles.metaLabel}>📅 Fechas:</span>
+              {workshop.dates
+                .filter((d) => d?.toDate)
+                .map((d) => d.toDate())
+                .sort((a, b) => a - b)
+                .map((d, idx) => {
+                  const isUpcoming = d >= new Date();
+                  return (
+                    <span
+                      key={idx}
+                      className={`${styles.dateChip} ${isUpcoming ? styles.dateChipUpcoming : styles.dateChipPast}`}
+                    >
+                      {d.toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </span>
+                  );
+                })}
+            </div>
+          ) : workshop.date ? (
             <span className={styles.metaItem}>📅 {formatDate(workshop.date)}</span>
-          )}
+          ) : null}
           {workshop.location && (
             <span className={styles.metaItem}>📍 {workshop.location}</span>
           )}
@@ -139,10 +159,66 @@ export default function WorkshopDetail() {
                   alt={`${workshop.title} - imagen ${idx + 1}`}
                   className={styles.galleryImage}
                   loading="lazy"
+                  onClick={() => setLightboxIndex(idx)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter') setLightboxIndex(idx); }}
                 />
               ))}
             </div>
           </section>
+        )}
+
+        {/* Lightbox */}
+        {lightboxIndex >= 0 && workshop.images && (
+          <div
+            className={styles.lightboxOverlay}
+            onClick={() => setLightboxIndex(-1)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setLightboxIndex(-1);
+              if (e.key === 'ArrowRight' && lightboxIndex < workshop.images.length - 1) setLightboxIndex(lightboxIndex + 1);
+              if (e.key === 'ArrowLeft' && lightboxIndex > 0) setLightboxIndex(lightboxIndex - 1);
+            }}
+            tabIndex={0}
+            role="dialog"
+            aria-label="Visor de imagen"
+            ref={(el) => el && el.focus()}
+          >
+            <button
+              className={styles.lightboxClose}
+              onClick={(e) => { e.stopPropagation(); setLightboxIndex(-1); }}
+              aria-label="Cerrar"
+            >
+              ✕
+            </button>
+
+            {lightboxIndex > 0 && (
+              <button
+                className={styles.lightboxPrev}
+                onClick={(e) => { e.stopPropagation(); setLightboxIndex(lightboxIndex - 1); }}
+                aria-label="Anterior"
+              >
+                ‹
+              </button>
+            )}
+
+            <img
+              src={workshop.images[lightboxIndex].url}
+              alt={`${workshop.title} - imagen ${lightboxIndex + 1}`}
+              className={styles.lightboxImage}
+              onClick={(e) => e.stopPropagation()}
+            />
+
+            {lightboxIndex < workshop.images.length - 1 && (
+              <button
+                className={styles.lightboxNext}
+                onClick={(e) => { e.stopPropagation(); setLightboxIndex(lightboxIndex + 1); }}
+                aria-label="Siguiente"
+              >
+                ›
+              </button>
+            )}
+          </div>
         )}
 
         {/* Contact form */}

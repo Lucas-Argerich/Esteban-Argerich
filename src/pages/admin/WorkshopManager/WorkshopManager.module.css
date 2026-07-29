@@ -85,6 +85,12 @@
   gap: var(--space-xs);
 }
 
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -291,10 +297,39 @@
   margin-top: var(--space-xs);
 }
 
+.thumbWrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .thumb {
   width: 80px;
   height: 80px;
   object-fit: cover;
   border-radius: var(--radius-sm);
   border: 1px solid #ddd;
+}
+
+.thumbRemove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-error, #d32f2f);
+  color: white;
+  border: 2px solid white;
+  font-size: 10px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-family);
+}
+
+.thumbRemove:hover {
+  opacity: 0.8;
 }
