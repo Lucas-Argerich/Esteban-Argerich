@@ -124,21 +124,45 @@ export default function WorkshopDetail() {
           {workshop.dates && workshop.dates.length > 0 ? (
             <div className={styles.metaDates}>
               <span className={styles.metaLabel}>📅 Fechas:</span>
-              {workshop.dates
-                .filter((d) => d?.toDate)
-                .map((d) => d.toDate())
-                .sort((a, b) => a - b)
-                .map((d, idx) => {
-                  const isUpcoming = d >= new Date();
-                  return (
-                    <span
-                      key={idx}
-                      className={`${styles.dateChip} ${isUpcoming ? styles.dateChipUpcoming : styles.dateChipPast}`}
-                    >
-                      {d.toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}
-                    </span>
-                  );
-                })}
+              {(workshop.dates[0]?.start
+                ? // Range format
+                  workshop.dates
+                    .filter((d) => d.start?.toDate)
+                    .sort((a, b) => a.start.seconds - b.start.seconds)
+                    .map((d, idx) => {
+                      const start = d.start.toDate();
+                      const end = d.end?.toDate ? d.end.toDate() : start;
+                      const isUpcoming = end >= new Date();
+                      const opts = { year: 'numeric', month: 'long', day: 'numeric' };
+                      const label = start.getTime() === end.getTime()
+                        ? start.toLocaleDateString('es-AR', opts)
+                        : `${start.toLocaleDateString('es-AR', opts)} — ${end.toLocaleDateString('es-AR', opts)}`;
+                      return (
+                        <span
+                          key={idx}
+                          className={`${styles.dateChip} ${isUpcoming ? styles.dateChipUpcoming : styles.dateChipPast}`}
+                        >
+                          {label}
+                        </span>
+                      );
+                    })
+                : // Legacy single date format
+                  workshop.dates
+                    .filter((d) => d?.toDate)
+                    .map((d) => d.toDate())
+                    .sort((a, b) => a - b)
+                    .map((d, idx) => {
+                      const isUpcoming = d >= new Date();
+                      return (
+                        <span
+                          key={idx}
+                          className={`${styles.dateChip} ${isUpcoming ? styles.dateChipUpcoming : styles.dateChipPast}`}
+                        >
+                          {d.toLocaleDateString('es-AR', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        </span>
+                      );
+                    })
+              )}
             </div>
           ) : workshop.date ? (
             <span className={styles.metaItem}>📅 {formatDate(workshop.date)}</span>

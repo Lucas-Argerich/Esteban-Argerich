@@ -9,7 +9,7 @@ import styles from './WorkshopManager.module.css';
 const INITIAL_FORM = {
   title: '',
   description: '',
-  dates: [''],
+  dates: [{ start: '', end: '' }],
   location: '',
 };
 
@@ -49,22 +49,22 @@ export default function WorkshopManager() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleDateChange(index, value) {
+  function handleDateChange(index, field, value) {
     setFormData((prev) => {
       const newDates = [...prev.dates];
-      newDates[index] = value;
+      newDates[index] = { ...newDates[index], [field]: value };
       return { ...prev, dates: newDates };
     });
   }
 
   function addDate() {
-    setFormData((prev) => ({ ...prev, dates: [...prev.dates, ''] }));
+    setFormData((prev) => ({ ...prev, dates: [...prev.dates, { start: '', end: '' }] }));
   }
 
   function removeDate(index) {
     setFormData((prev) => {
       const newDates = prev.dates.filter((_, i) => i !== index);
-      return { ...prev, dates: newDates.length > 0 ? newDates : [''] };
+      return { ...prev, dates: newDates.length > 0 ? newDates : [{ start: '', end: '' }] };
     });
   }
 
@@ -127,17 +127,25 @@ export default function WorkshopManager() {
   function openEditForm(workshop) {
     setEditingWorkshop(workshop);
     // Convert dates array or single date to string array
-    let dates = [''];
+    let dates = [{ start: '', end: '' }];
     if (workshop.dates && workshop.dates.length > 0) {
-      dates = workshop.dates.map((d) =>
-        typeof d?.toDate === 'function' ? d.toDate().toISOString().split('T')[0] : ''
-      ).filter(Boolean);
-      if (dates.length === 0) dates = [''];
+      dates = workshop.dates.map((d) => {
+        if (d.start && d.end) {
+          // New range format
+          const start = typeof d.start?.toDate === 'function' ? d.start.toDate().toISOString().split('T')[0] : '';
+          const end = typeof d.end?.toDate === 'function' ? d.end.toDate().toISOString().split('T')[0] : '';
+          return { start, end };
+        }
+        // Legacy single date format
+        const val = typeof d?.toDate === 'function' ? d.toDate().toISOString().split('T')[0] : '';
+        return { start: val, end: val };
+      }).filter((d) => d.start);
+      if (dates.length === 0) dates = [{ start: '', end: '' }];
     } else if (workshop.date) {
       const dateValue = typeof workshop.date?.toDate === 'function'
         ? workshop.date.toDate().toISOString().split('T')[0]
         : '';
-      dates = dateValue ? [dateValue] : [''];
+      dates = dateValue ? [{ start: dateValue, end: dateValue }] : [{ start: '', end: '' }];
     }
     setFormData({
       title: workshop.title || '',
@@ -170,7 +178,7 @@ export default function WorkshopManager() {
       setError('El título es obligatorio.');
       return;
     }
-    const validDates = formData.dates.filter((d) => d.trim() !== '');
+    const validDates = formData.dates.filter((d) => d.start.trim() !== '');
     if (validDates.length === 0) {
       setError('Al menos una fecha es obligatoria.');
       return;
@@ -218,17 +226,20 @@ export default function WorkshopManager() {
         updatedAt: Timestamp.now(),
       };
 
-      // Save all dates as Timestamps array
-      const validDates = formData.dates.filter((d) => d.trim() !== '');
-      const dateTimestamps = validDates
-        .map((d) => Timestamp.fromDate(new Date(d + 'T00:00:00')))
-        .sort((a, b) => a.seconds - b.seconds);
-      workshopData.dates = dateTimestamps;
+      // Save all dates as range objects { start: Timestamp, end: Timestamp }
+      const validDates = formData.dates.filter((d) => d.start.trim() !== '');
+      const dateRanges = validDates
+        .map((d) => ({
+          start: Timestamp.fromDate(new Date(d.start + 'T00:00:00')),
+          end: Timestamp.fromDate(new Date((d.end || d.start) + 'T00:00:00')),
+        }))
+        .sort((a, b) => a.start.seconds - b.start.seconds);
+      workshopData.dates = dateRanges;
 
-      // Set `date` to the next upcoming date (or the last one if all past)
+      // Set `date` to the next upcoming start date (or the last one if all past)
       const now = new Date();
-      const upcomingDate = dateTimestamps.find((ts) => ts.toDate() >= now);
-      workshopData.date = upcomingDate || dateTimestamps[dateTimestamps.length - 1];
+      const upcomingDate = dateRanges.find((r) => r.start.toDate() >= now);
+      workshopData.date = upcomingDate ? upcomingDate.start : dateRanges[dateRanges.length - 1].start;
 
       // Upload gallery images
       const existingImages = editingWorkshop?.images || [];
@@ -322,26 +333,46 @@ export default function WorkshopManager() {
   function getNextDate(workshop) {
     if (workshop.dates && workshop.dates.length > 0) {
       const now = new Date();
+      // New range format
+      if (workshop.dates[0]?.start) {
+        const sorted = workshop.dates
+          .filter((d) => d.start?.toDate)
+          .sort((a, b) => a.start.seconds - b.start.seconds);
+        const upcoming = sorted.find((d) => d.end.toDate() >= now);
+        return upcoming || sorted[sorted.length - 1] || null;
+      }
+      // Legacy single date format
       const upcoming = workshop.dates
         .filter((d) => d?.toDate)
         .map((d) => d.toDate())
         .sort((a, b) => a - b)
         .find((d) => d >= now);
-      if (upcoming) return upcoming;
-      // All past: show the most recent one
+      if (upcoming) return { start: { toDate: () => upcoming }, end: { toDate: () => upcoming } };
       const sorted = workshop.dates
         .filter((d) => d?.toDate)
         .map((d) => d.toDate())
         .sort((a, b) => b - a);
-      return sorted[0] || null;
+      return sorted[0] ? { start: { toDate: () => sorted[0] }, end: { toDate: () => sorted[0] } } : null;
     }
-    return workshop.date?.toDate ? workshop.date.toDate() : null;
+    if (workshop.date?.toDate) {
+      return { start: workshop.date, end: workshop.date };
+    }
+    return null;
+  }
+
+  function formatDateRange(range) {
+    if (!range) return '—';
+    const start = range.start?.toDate ? range.start.toDate() : null;
+    const end = range.end?.toDate ? range.end.toDate() : null;
+    if (!start) return '—';
+    const opts = { year: 'numeric', month: 'short', day: 'numeric' };
+    const startStr = start.toLocaleDateString('es-AR', opts);
+    if (!end || start.getTime() === end.getTime()) return startStr;
+    return `${startStr} — ${end.toLocaleDateString('es-AR', opts)}`;
   }
 
   function formatNextDate(workshop) {
-    const d = getNextDate(workshop);
-    if (!d) return '—';
-    return d.toLocaleDateString('es-AR', { year: 'numeric', month: 'short', day: 'numeric' });
+    return formatDateRange(getNextDate(workshop));
   }
 
   function getDateCount(workshop) {
@@ -447,14 +478,23 @@ export default function WorkshopManager() {
           />
 
           <label className={styles.label}>Fechas</label>
-          {formData.dates.map((dateVal, idx) => (
+          {formData.dates.map((dateRange, idx) => (
             <div key={idx} className={styles.dateRow}>
               <input
                 className={styles.input}
                 type="date"
-                value={dateVal}
-                onChange={(e) => handleDateChange(idx, e.target.value)}
+                value={dateRange.start}
+                onChange={(e) => handleDateChange(idx, 'start', e.target.value)}
                 required={idx === 0}
+                title="Fecha inicio"
+              />
+              <span style={{ padding: '0 4px', color: 'var(--color-secondary)' }}>→</span>
+              <input
+                className={styles.input}
+                type="date"
+                value={dateRange.end}
+                onChange={(e) => handleDateChange(idx, 'end', e.target.value)}
+                title="Fecha fin (dejar igual para un solo día)"
               />
               {formData.dates.length > 1 && (
                 <button
