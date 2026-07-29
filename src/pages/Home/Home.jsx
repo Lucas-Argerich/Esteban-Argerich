@@ -1,8 +1,10 @@
 import heroImageDesktop from './assets/backgroundOne.jpg';
 import heroImageMobile from './assets/backgroundTwo.jpg';
+import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './Home.module.css';
 
 export default function Home() {
+  usePageTitle();
   return (
     <div className={styles.home}>
       <section className={styles.hero} aria-label="Hero">

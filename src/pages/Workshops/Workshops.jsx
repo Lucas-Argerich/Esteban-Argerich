@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { getWorkshops } from '../../services/workshopService';
+import { usePageTitle } from '../../hooks/usePageTitle';
 import WorkshopCard from '../../components/workshops/WorkshopCard/WorkshopCard';
 import styles from './Workshops.module.css';
 
 export default function Workshops() {
+  usePageTitle('Talleres');
   const [workshops, setWorkshops] = useState([]);
   const [loading, setLoading] = useState(true);
 

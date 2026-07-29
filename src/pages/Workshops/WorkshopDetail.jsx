@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 import { getWorkshopById } from '../../services/workshopService';
+import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './WorkshopDetail.module.css';
 
 function formatDate(date) {
@@ -23,6 +24,8 @@ export default function WorkshopDetail() {
   const [formData, setFormData] = useState({ name: '', phone: '', message: 'Hola, me interesa este taller. ¿Podrías darme más información?' });
   const [formStatus, setFormStatus] = useState(null); // 'success' | 'error' | null
   const [lightboxIndex, setLightboxIndex] = useState(-1); // -1 = closed
+
+  usePageTitle(workshop?.title || 'Taller');
 
   useEffect(() => {
     async function fetchWorkshop() {

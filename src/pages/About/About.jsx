@@ -1,8 +1,10 @@
 import React from 'react';
+import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './About.module.css';
 import profilePhoto from '../../assets/facebook_1566015511278.jpg';
 
 export default function About() {
+  usePageTitle('Sobre Mí');
   return (
     <section className={styles.section}>
       <div className={styles.content}>

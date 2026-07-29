@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getPhotos, getCategories } from '../../services/galleryService';
+import { usePageTitle } from '../../hooks/usePageTitle';
 import CategoryFilter from '../../components/gallery/CategoryFilter/CategoryFilter';
 import MasonryGrid from '../../components/gallery/MasonryGrid/MasonryGrid';
 import Lightbox from '../../components/gallery/Lightbox/Lightbox';
 import styles from './Gallery.module.css';
 
 export default function Gallery() {
+  usePageTitle('Galería');
   const [photos, setPhotos] = useState([]);
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
