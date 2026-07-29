@@ -19,10 +19,29 @@ const WorkshopManager = React.lazy(() => import('./pages/admin/WorkshopManager/W
 
 function LoadingSpinner() {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
-      <div className="loading-spinner" aria-label="Loading page">
-        Loading...
-      </div>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '60vh',
+        gap: '16px',
+      }}
+      role="status"
+      aria-label="Cargando página"
+    >
+      <div
+        style={{
+          width: '40px',
+          height: '40px',
+          border: '3px solid #fafafa',
+          borderTopColor: '#8b7355',
+          borderRadius: '50%',
+          animation: 'pageSpinnerRotate 0.8s linear infinite',
+        }}
+      />
+      <style>{`@keyframes pageSpinnerRotate { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }
