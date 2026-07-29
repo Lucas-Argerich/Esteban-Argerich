@@ -1,5 +1,3 @@
-import heroImageDesktop from './assets/bg-B2.jpeg';
-import heroImageMobile from './assets/bg-B4.jpeg';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './Home.module.css';
 
@@ -9,9 +7,9 @@ export default function Home() {
     <div className={styles.home}>
       <section className={styles.hero} aria-label="Hero">
         <picture>
-          <source media="(min-width: 768px)" srcSet={heroImageDesktop} />
+          <source media="(min-width: 768px)" srcSet="/bg-B2.jpeg" />
           <img
-            src={heroImageMobile}
+            src="/bg-B4.jpeg"
             alt="Nature photography by Esteban Argerich"
             className={styles.heroImage}
           />
