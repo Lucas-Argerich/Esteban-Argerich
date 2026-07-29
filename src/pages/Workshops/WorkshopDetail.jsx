@@ -150,30 +150,40 @@ export default function WorkshopDetail() {
 
         <p className={styles.description}>{workshop.description}</p>
 
-        {/* Gallery images */}
+        {/* Gallery images and videos */}
         {workshop.images && workshop.images.length > 0 && (
           <section className={styles.gallery}>
-            <h2 className={styles.galleryTitle}>Imágenes</h2>
+            <h2 className={styles.galleryTitle}>Galería</h2>
             <div className={styles.galleryGrid}>
-              {workshop.images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img.url}
-                  alt={`${workshop.title} - imagen ${idx + 1}`}
-                  className={styles.galleryImage}
-                  loading="lazy"
-                  onClick={() => setLightboxIndex(idx)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => { if (e.key === 'Enter') setLightboxIndex(idx); }}
-                />
+              {workshop.images.map((media, idx) => (
+                media.type === 'video' ? (
+                  <video
+                    key={idx}
+                    src={media.url}
+                    className={styles.galleryVideo}
+                    controls
+                    preload="metadata"
+                  />
+                ) : (
+                  <img
+                    key={idx}
+                    src={media.url}
+                    alt={`${workshop.title} - imagen ${idx + 1}`}
+                    className={styles.galleryImage}
+                    loading="lazy"
+                    onClick={() => setLightboxIndex(idx)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter') setLightboxIndex(idx); }}
+                  />
+                )
               ))}
             </div>
           </section>
         )}
 
-        {/* Lightbox */}
-        {lightboxIndex >= 0 && workshop.images && (
+        {/* Lightbox (images only) */}
+        {lightboxIndex >= 0 && workshop.images && workshop.images[lightboxIndex]?.type !== 'video' && (
           <div
             className={styles.lightboxOverlay}
             onClick={() => setLightboxIndex(-1)}

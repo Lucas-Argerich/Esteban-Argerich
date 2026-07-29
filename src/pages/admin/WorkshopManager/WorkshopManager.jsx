@@ -90,13 +90,21 @@ export default function WorkshopManager() {
   function handleGalleryFilesChange(e) {
     const files = Array.from(e.target.files || []);
     for (const file of files) {
-      const validation = validateImageFile(file);
-      if (!validation.valid) {
-        setError(
-          validation.error === 'FILE_TOO_LARGE'
-            ? `${file.name}: demasiado grande (máx. 10MB).`
-            : `${file.name}: formato no soportado.`
-        );
+      const isVideo = file.type.startsWith('video/');
+      if (!isVideo) {
+        const validation = validateImageFile(file);
+        if (!validation.valid) {
+          setError(
+            validation.error === 'FILE_TOO_LARGE'
+              ? `${file.name}: demasiado grande (máx. 10MB).`
+              : `${file.name}: formato no soportado.`
+          );
+          setGalleryFiles([]);
+          e.target.value = '';
+          return;
+        }
+      } else if (file.size > 100 * 1024 * 1024) {
+        setError(`${file.name}: video demasiado grande (máx. 100MB).`);
         setGalleryFiles([]);
         e.target.value = '';
         return;
@@ -229,13 +237,15 @@ export default function WorkshopManager() {
       if (galleryFiles.length > 0) {
         for (let i = 0; i < galleryFiles.length; i++) {
           const file = galleryFiles[i];
-          setUploadStatus(`Subiendo imagen ${i + 1}/${galleryFiles.length}...`);
+          const isVideo = file.type.startsWith('video/');
+          setUploadStatus(`Subiendo ${isVideo ? 'video' : 'imagen'} ${i + 1}/${galleryFiles.length}...`);
           const uuid = crypto.randomUUID
             ? crypto.randomUUID()
             : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-          const imgPath = `workshops/gallery-${uuid}.webp`;
-          const imgUrl = await uploadFile(file, imgPath);
-          newImages.push({ url: imgUrl, path: imgPath });
+          const ext = file.name.split('.').pop() || (isVideo ? 'mp4' : 'webp');
+          const mediaPath = `workshops/gallery-${uuid}.${ext}`;
+          const mediaUrl = await uploadFile(file, mediaPath);
+          newImages.push({ url: mediaUrl, path: mediaPath, type: isVideo ? 'video' : 'image' });
         }
         setUploadStatus('');
       }
@@ -490,32 +500,36 @@ export default function WorkshopManager() {
           />
 
           <label className={styles.label} htmlFor="wm-gallery">
-            Imágenes de galería (opcional, múltiples)
+            Imágenes y videos de galería (opcional, múltiples)
           </label>
           <input
             id="wm-gallery"
             className={styles.input}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime"
             multiple
             onChange={handleGalleryFilesChange}
           />
           {galleryFiles.length > 0 && (
-            <p className={styles.label}>{galleryFiles.length} imagen(es) seleccionada(s)</p>
+            <p className={styles.label}>{galleryFiles.length} archivo(s) seleccionado(s)</p>
           )}
 
           {editingWorkshop?.images?.length > 0 && (
             <div className={styles.existingImages}>
-              <p className={styles.label}>Imágenes actuales ({editingWorkshop.images.length}):</p>
+              <p className={styles.label}>Media actual ({editingWorkshop.images.length}):</p>
               <div className={styles.imageThumbs}>
                 {editingWorkshop.images.map((img, idx) => (
                   <div key={idx} className={styles.thumbWrapper}>
-                    <img src={img.url} alt={`Imagen ${idx + 1}`} className={styles.thumb} />
+                    {img.type === 'video' ? (
+                      <video src={img.url} className={styles.thumb} muted />
+                    ) : (
+                      <img src={img.url} alt={`Media ${idx + 1}`} className={styles.thumb} />
+                    )}
                     <button
                       type="button"
                       className={styles.thumbRemove}
                       onClick={() => handleRemoveImage(idx)}
-                      title="Eliminar imagen"
+                      title="Eliminar"
                     >
                       ✕
                     </button>

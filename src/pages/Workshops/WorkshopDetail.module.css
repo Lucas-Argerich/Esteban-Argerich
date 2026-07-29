@@ -132,6 +132,13 @@
   cursor: pointer;
 }
 
+.galleryVideo {
+  width: 100%;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: #000;
+}
+
 /* Lightbox */
 .lightboxOverlay {
   position: fixed;
