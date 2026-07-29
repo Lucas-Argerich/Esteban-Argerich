@@ -1,5 +1,5 @@
-import heroImageDesktop from './assets/backgroundOne.jpg';
-import heroImageMobile from './assets/backgroundTwo.jpg';
+import heroImageDesktop from './assets/bg-B2.jpeg';
+import heroImageMobile from './assets/bg-B4.jpeg';
 import { usePageTitle } from '../../hooks/usePageTitle';
 import styles from './Home.module.css';
 
@@ -16,7 +16,6 @@ export default function Home() {
             className={styles.heroImage}
           />
         </picture>
-        <div className={styles.heroOverlay} aria-hidden="true" />
         <div className={styles.heroContent}>
           <h1 className={styles.heroName}>Esteban Argerich</h1>
           <p className={styles.heroTagline}>Fotografía de Naturaleza</p>
