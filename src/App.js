@@ -5,8 +5,8 @@ import Footer from './components/layout/Footer/Footer';
 import ProtectedRoute from './components/common/ProtectedRoute/ProtectedRoute';
 
 // Lazy-loaded public pages
-const Home = React.lazy(() => import('./pages/home/Home'));
-const Gallery = React.lazy(() => import('./pages/gallery/gallery'));
+const Home = React.lazy(() => import('./pages/Home/Home'));
+const Gallery = React.lazy(() => import('./pages/Gallery/Gallery'));
 const Workshops = React.lazy(() => import('./pages/Workshops/Workshops'));
 const WorkshopDetail = React.lazy(() => import('./pages/Workshops/WorkshopDetail'));
 const About = React.lazy(() => import('./pages/About/About'));
