@@ -1,0 +1,149 @@
+.page {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--content-padding);
+}
+
+.header {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--space-lg);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.emptyMessage {
+  text-align: center;
+  color: var(--color-secondary);
+  padding: var(--space-xl) var(--space-sm);
+  font-size: var(--font-size-lg);
+}
+
+/* Skeleton loader for workshops */
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .skeletonGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .skeletonGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.skeletonCard {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.skeletonImage {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(
+    90deg,
+    var(--color-background, #fafafa) 25%,
+    #e8e8e8 50%,
+    var(--color-background, #fafafa) 75%
+  );
+  background-size: 200% 100%;
+  animation: workshopShimmer 1.5s infinite;
+}
+
+.skeletonContent {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.skeletonTitle {
+  height: 20px;
+  width: 70%;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--color-background, #fafafa) 25%,
+    #e8e8e8 50%,
+    var(--color-background, #fafafa) 75%
+  );
+  background-size: 200% 100%;
+  animation: workshopShimmer 1.5s infinite;
+}
+
+.skeletonText {
+  height: 14px;
+  width: 100%;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--color-background, #fafafa) 25%,
+    #e8e8e8 50%,
+    var(--color-background, #fafafa) 75%
+  );
+  background-size: 200% 100%;
+  animation: workshopShimmer 1.5s infinite;
+}
+
+.skeletonTextShort {
+  height: 14px;
+  width: 60%;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--color-background, #fafafa) 25%,
+    #e8e8e8 50%,
+    var(--color-background, #fafafa) 75%
+  );
+  background-size: 200% 100%;
+  animation: workshopShimmer 1.5s infinite;
+}
+
+.skeletonMeta {
+  height: 12px;
+  width: 40%;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-xs);
+  background: linear-gradient(
+    90deg,
+    var(--color-background, #fafafa) 25%,
+    #e8e8e8 50%,
+    var(--color-background, #fafafa) 75%
+  );
+  background-size: 200% 100%;
+  animation: workshopShimmer 1.5s infinite;
+}
+
+@keyframes workshopShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

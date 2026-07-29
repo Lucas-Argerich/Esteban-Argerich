@@ -1,0 +1,42 @@
+/* Footer Component — CSS Module */
+
+.footer {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  text-align: center;
+  padding: var(--space-lg) var(--space-sm);
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.socialLink {
+  color: var(--color-white);
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialLink:hover,
+.socialLink:focus {
+  opacity: 1;
+}
+
+.socialLink svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.copyright {
+  font-size: var(--font-size-sm);
+  opacity: 0.7;
+  margin: 0;
+}

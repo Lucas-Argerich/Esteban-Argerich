@@ -1,0 +1,86 @@
+/* ==========================================================================
+   Home Page — Hero Section
+   Full-viewport hero with background photograph
+   ========================================================================== */
+
+.home {
+  /* Pull hero up behind the fixed nav for full-bleed effect */
+  margin-top: -80px;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.heroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+}
+
+/* Dark overlay for text readability */
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* Text content centered over the hero */
+.heroContent {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: var(--space-sm);
+}
+
+.heroName {
+  font-family: var(--font-family);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin: 0 0 var(--space-sm);
+  line-height: var(--line-height-tight);
+  letter-spacing: 0.02em;
+}
+
+.heroTagline {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-white);
+  margin: 0;
+  line-height: var(--line-height-base);
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   Mobile — below 768px
+   Adjust hero image cropping for portrait-oriented screens
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .heroImage {
+    object-position: 60% top;
+  }
+
+  .heroName {
+    font-size: var(--font-size-2xl);
+  }
+
+  .heroTagline {
+    font-size: var(--font-size-lg);
+  }
+}

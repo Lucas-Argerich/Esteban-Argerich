@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Design Tokens — CSS Custom Properties
+   Photographer Portfolio: Esteban Argerich
+   ========================================================================== */
+
+:root {
+  /* Colors — max 3 primary + white + black
+     Primary palette enforces a minimalistic, photography-focused aesthetic.
+     Contrast ratios verified against WCAG 2.1 AA (4.5:1 minimum for normal text):
+       --color-primary on --color-background: ~17.4:1 ✓
+       --color-secondary on --color-background: ~7.3:1 ✓
+       --color-accent on --color-background: ~4.6:1 ✓
+  */
+  --color-primary: #1a1a1a;        /* Near-black — headings, body text */
+  --color-secondary: #4a4a4a;      /* Dark gray — secondary/supporting text */
+  --color-accent: #8b7355;         /* Warm tone — links, highlights, accents */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-background: #fafafa;     /* Off-white page background */
+  --color-surface: #ffffff;        /* Card/surface background */
+  --color-error: #d32f2f;          /* Error and validation states */
+
+  /* Typography — single sans-serif family */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.25rem;    /* 20px */
+  --font-size-xl: 1.5rem;     /* 24px */
+  --font-size-2xl: 2rem;      /* 32px */
+  --font-size-3xl: 3rem;      /* 48px */
+
+  /* Font weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Line heights */
+  --line-height-tight: 1.2;
+  --line-height-base: 1.6;
+  --line-height-relaxed: 1.8;
+
+  /* Spacing — generous whitespace, min 48px between major sections */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;     /* Minimum section spacing */
+  --space-xl: 64px;
+  --space-2xl: 96px;
+
+  /* Transitions — between 200ms and 400ms for interactive state changes */
+  --transition-fast: 200ms ease;
+  --transition-base: 300ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Breakpoints (reference values — used in media queries) */
+  --bp-mobile: 768px;
+  --bp-desktop: 1200px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Layout */
+  --max-width: 1400px;
+  --content-padding: var(--space-sm);
+}

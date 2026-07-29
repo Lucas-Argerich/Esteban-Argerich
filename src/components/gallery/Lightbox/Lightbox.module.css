@@ -1,0 +1,84 @@
+/* Lightbox — Full-screen image overlay */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--space-sm, 16px);
+  right: var(--space-sm, 16px);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 2rem;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: opacity var(--transition-fast, 200ms ease);
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+  opacity: 1;
+  color: #ffffff;
+}
+
+.prevButton,
+.nextButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 2.5rem;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: opacity var(--transition-fast, 200ms ease);
+}
+
+.prevButton:hover,
+.prevButton:focus-visible,
+.nextButton:hover,
+.nextButton:focus-visible {
+  opacity: 1;
+  color: #ffffff;
+}
+
+.prevButton {
+  left: var(--space-sm, 16px);
+}
+
+.nextButton {
+  right: var(--space-sm, 16px);
+}
+
+/* Hide nav buttons when only one image */
+.hidden {
+  display: none;
+}

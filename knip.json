@@ -1,0 +1,8 @@
+{
+  "entry": [
+    "src/App.js",
+    "src/pages/**/*.{js,jsx}",
+    "src/components/**/*.{js,jsx}"
+  ],
+  "project": ["src/**/*.{js,jsx}"]
+}

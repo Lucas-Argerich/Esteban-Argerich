@@ -1,0 +1,281 @@
+.page {
+  padding: var(--space-md);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin-bottom: var(--space-md);
+}
+
+.uploadSection {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.uploadSection input[type='file'] {
+  flex: 1;
+  min-width: 200px;
+}
+
+.uploadSection button {
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-accent);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.uploadSection button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.uploadSection button:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+/* Category selector in upload */
+.categorySelect {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.categoryLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-secondary);
+  white-space: nowrap;
+}
+
+.select {
+  padding: 6px 12px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.select:focus {
+  border-color: var(--color-accent);
+}
+
+.categoryInput {
+  padding: 6px 12px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.categoryInput:focus {
+  border-color: var(--color-accent);
+}
+
+/* Progress */
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: var(--space-xs);
+}
+
+.progressBarFill {
+  height: 100%;
+  background: var(--color-accent);
+  transition: width var(--transition-fast);
+}
+
+.progressText {
+  width: 100%;
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+  margin-top: var(--space-xs);
+}
+
+.error {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-xs);
+  width: 100%;
+  white-space: pre-line;
+}
+
+/* Photo grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: var(--space-sm);
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.imageCard {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  aspect-ratio: 1;
+}
+
+.imageCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Card overlay with category badge and actions */
+.cardOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: var(--space-sm) var(--space-xs);
+  display: flex;
+  align-items: flex-end;
+  min-height: 60px;
+}
+
+.cardActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: var(--space-xs);
+}
+
+.categoryBadge {
+  font-size: var(--font-size-xs);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.categoryBadge:hover {
+  background: var(--color-white);
+}
+
+.deleteBtn {
+  background: rgba(211, 47, 47, 0.9) !important;
+  color: var(--color-white) !important;
+  border: none !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 4px 10px !important;
+  font-size: var(--font-size-xs) !important;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.imageCard:hover .deleteBtn {
+  opacity: 1;
+}
+
+/* Edit category form inside card */
+.editCategoryForm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.editSelect {
+  padding: 4px 8px;
+  font-size: var(--font-size-xs);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-primary);
+  outline: none;
+}
+
+.editInput {
+  padding: 4px 8px;
+  font-size: var(--font-size-xs);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-primary);
+  outline: none;
+  width: 100%;
+}
+
+.editActions {
+  display: flex;
+  gap: 4px;
+}
+
+.saveBtn {
+  background: rgba(46, 125, 50, 0.9) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-xs) !important;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  background: rgba(211, 47, 47, 0.9) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 4px 8px !important;
+  font-size: var(--font-size-xs) !important;
+  cursor: pointer;
+}
+
+.loading {
+  text-align: center;
+  padding: var(--space-lg);
+  color: var(--color-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.empty {
+  text-align: center;
+  padding: var(--space-lg);
+  color: var(--color-secondary);
+}

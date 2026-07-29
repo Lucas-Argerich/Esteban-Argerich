@@ -1,0 +1,300 @@
+.page {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-sm);
+  font-family: var(--font-family);
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin: 0 0 var(--space-md);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-md);
+}
+
+.workshopList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.workshopItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.workshopInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.workshopTitle {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.workshopMeta {
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+  margin: 0;
+}
+
+.toggleBadge {
+  display: inline-block;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: 2px 10px;
+  border-radius: 9999px;
+  margin-left: var(--space-xs);
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--transition-fast), background-color var(--transition-fast);
+}
+
+.toggleBadge:hover {
+  opacity: 0.8;
+}
+
+.toggleActive {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.toggleInactive {
+  background-color: #fbe9e7;
+  color: #c62828;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 600px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-md);
+}
+
+.formTitle {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-secondary);
+  margin-bottom: 4px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px var(--space-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.input:focus {
+  border-color: var(--color-accent);
+}
+
+.textarea {
+  width: 100%;
+  padding: 12px var(--space-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition-fast);
+  box-sizing: border-box;
+  min-height: 100px;
+  resize: vertical;
+}
+
+.textarea:focus {
+  border-color: var(--color-accent);
+}
+
+.button {
+  padding: 10px 20px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white);
+  background-color: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonSecondary {
+  padding: 10px 20px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.buttonSecondary:hover {
+  background-color: var(--color-background);
+}
+
+.buttonDanger {
+  padding: 10px 20px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white);
+  background-color: var(--color-error);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.buttonDanger:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.buttonDanger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background-color: #eee;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: var(--space-xs);
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-accent);
+  transition: width var(--transition-fast);
+}
+
+.error {
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--space-lg);
+  color: var(--color-secondary);
+  font-size: var(--font-size-base);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dialog {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-md);
+  max-width: 400px;
+  width: 90%;
+}
+
+.dialogTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  margin: 0 0 var(--space-xs);
+}
+
+.dialogText {
+  font-size: var(--font-size-base);
+  color: var(--color-secondary);
+  margin: 0 0 var(--space-md);
+}
+
+.dialogActions {
+  display: flex;
+  gap: var(--space-xs);
+  justify-content: flex-end;
+}
+
+
+/* Gallery images in form */
+.existingImages {
+  margin-top: var(--space-xs);
+}
+
+.imageThumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid #ddd;
+}

@@ -1,0 +1,33 @@
+/* MasonryGrid — CSS columns-based masonry layout */
+
+.grid {
+  column-count: 1;
+  column-gap: var(--grid-gap, 16px);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid {
+    column-count: 3;
+  }
+}
+
+.gridItem {
+  break-inside: avoid;
+  margin-bottom: var(--grid-gap, 16px);
+  cursor: pointer;
+  border-radius: var(--radius-sm, 4px);
+  overflow: hidden;
+  transition: transform var(--transition-fast, 200ms ease),
+              box-shadow var(--transition-fast, 200ms ease);
+}
+
+.gridItem:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.1));
+}

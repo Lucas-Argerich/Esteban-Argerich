@@ -1,0 +1,28 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Gallery photos (stored at photos/originals/{id}.webp)
+    match /photos/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/(jpeg|png|webp)');
+    }
+
+    // Workshop cover images (stored at workshops/cover-{uuid}.webp)
+    match /workshops/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/(jpeg|png|webp)');
+    }
+
+    // Site assets (e.g., hero images, logo)
+    match /site/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/(jpeg|png|webp)');
+    }
+  }
+}

@@ -1,0 +1,55 @@
+/* OptimizedImage — progressive loading with blur-up */
+
+.container {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-background, #fafafa);
+  cursor: inherit;
+}
+
+/* Placeholder — blurred, covers the container until image loads */
+.placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transition: opacity var(--transition-base, 300ms ease);
+  opacity: 1;
+}
+
+.placeholderHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.placeholderImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+  transform: scale(1.05); /* Prevent blur edges from showing */
+}
+
+.placeholderGradient {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--color-background, #fafafa) 0%,
+    var(--color-secondary, #4a4a4a) 100%
+  );
+  opacity: 0.15;
+}
+
+/* Main image — fades in over the placeholder */
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--transition-base, 300ms ease);
+}
+
+.imageLoaded {
+  opacity: 1;
+}

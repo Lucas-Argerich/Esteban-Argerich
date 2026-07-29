@@ -1,20 +1,21 @@
-import React from "react";
-import styled from "styled-components";
-import HorizontalBackground from "./assets/backgroundOne.jpg";
-import VerticalBackground from "./assets/backgroundTwo.jpg";
-
-const Main = styled.main`
-  background: url(${VerticalBackground}) no-repeat;
-  background-size: cover;
-  height: calc(100vh - 130px);
-
-  @media (min-width: 769px) {
-    background: url(${HorizontalBackground}) no-repeat;
-    background-size: calc(80vw);
-    background-position: left center;
-  } ;
-`;
+import heroImage from './assets/backgroundOne.jpg';
+import styles from './Home.module.css';
 
 export default function Home() {
-  return <Main />;
+  return (
+    <div className={styles.home}>
+      <section className={styles.hero} aria-label="Hero">
+        <img
+          src={heroImage}
+          alt="Nature photography by Esteban Argerich"
+          className={styles.heroImage}
+        />
+        <div className={styles.heroOverlay} aria-hidden="true" />
+        <div className={styles.heroContent}>
+          <h1 className={styles.heroName}>Esteban Argerich</h1>
+          <p className={styles.heroTagline}>Fotografía de Naturaleza</p>
+        </div>
+      </section>
+    </div>
+  );
 }

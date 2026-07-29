@@ -1,0 +1,166 @@
+/* ==========================================================================
+   Responsive Breakpoint Patterns
+   
+   CSS does not support real mixins, so this file documents the media query
+   patterns to use throughout the project. Copy these patterns into your
+   component CSS Modules or stylesheets as needed.
+   
+   Breakpoints:
+     Mobile:  < 768px   — single column, hamburger nav, stacked layouts
+     Tablet:  768px – 1199px — 2-column gallery, multi-column workshops
+     Desktop: ≥ 1200px  — 3-column gallery, full inline nav, side-by-side
+   ========================================================================== */
+
+
+/* -------------------------------------------------------------------------
+   MOBILE-FIRST BASE
+   
+   Default styles target mobile (< 768px).
+   No media query needed — write base styles directly.
+   
+   Example:
+   
+   .component {
+     display: flex;
+     flex-direction: column;
+     gap: var(--space-sm);
+     padding: var(--space-sm);
+   }
+   ------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------
+   TABLET AND UP (≥ 768px)
+   
+   @media (min-width: 768px) {
+     .component {
+       flex-direction: row;
+       gap: var(--space-md);
+       padding: var(--space-md);
+     }
+   
+     .grid {
+       grid-template-columns: repeat(2, 1fr);
+     }
+   
+     .nav-links {
+       display: flex;
+     }
+   
+     .hamburger {
+       display: none;
+     }
+   }
+   ------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------
+   DESKTOP (≥ 1200px)
+   
+   @media (min-width: 1200px) {
+     .component {
+       gap: var(--space-lg);
+       padding: var(--space-lg);
+     }
+   
+     .grid {
+       grid-template-columns: repeat(3, 1fr);
+     }
+   
+     .container {
+       max-width: var(--max-width);
+     }
+   }
+   ------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------
+   WIDE VIEWPORT SAFETY (prevents overflow on ultra-wide monitors)
+   
+   @media (min-width: 2560px) {
+     .container {
+       max-width: var(--max-width);
+       margin-inline: auto;
+     }
+   }
+   ------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------
+   REDUCED MOTION (accessibility)
+   
+   @media (prefers-reduced-motion: reduce) {
+     *,
+     *::before,
+     *::after {
+       animation-duration: 0.01ms !important;
+       animation-iteration-count: 1 !important;
+       transition-duration: 0.01ms !important;
+       scroll-behavior: auto !important;
+     }
+   }
+   ------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------
+   COMMON RESPONSIVE GRID PATTERN
+   
+   .responsive-grid {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: var(--space-md);
+   }
+   
+   @media (min-width: 768px) {
+     .responsive-grid {
+       grid-template-columns: repeat(2, 1fr);
+     }
+   }
+   
+   @media (min-width: 1200px) {
+     .responsive-grid {
+       grid-template-columns: repeat(3, 1fr);
+     }
+   }
+   ------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------
+   CONTAINER PATTERN
+   
+   .container {
+     width: 100%;
+     max-width: var(--max-width);
+     margin-inline: auto;
+     padding-inline: var(--space-sm);
+   }
+   
+   @media (min-width: 768px) {
+     .container {
+       padding-inline: var(--space-md);
+     }
+   }
+   
+   @media (min-width: 1200px) {
+     .container {
+       padding-inline: var(--space-lg);
+     }
+   }
+   ------------------------------------------------------------------------- */
+
+
+/* ==========================================================================
+   Reduced motion — applied globally
+   This is an actual rule (not just documentation) to ensure accessibility.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

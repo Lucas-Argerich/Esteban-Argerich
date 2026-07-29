@@ -1,0 +1,69 @@
+/* ==========================================================================
+   CategoryFilter Component
+   Horizontally scrollable row of pill-shaped filter buttons.
+   Mobile-first: scrollable on small viewports, wraps on wider screens.
+   ========================================================================== */
+
+.filterContainer {
+  display: flex;
+  gap: var(--space-xs);
+  padding: var(--space-md) 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.filterContainer::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Pill-shaped filter button */
+.filterButton {
+  flex-shrink: 0;
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-secondary);
+  background-color: transparent;
+  border: 1px solid var(--color-secondary);
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast);
+}
+
+.filterButton:hover,
+.filterButton:focus-visible {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  outline: none;
+}
+
+/* Active / selected state */
+.filterButtonActive {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+}
+
+.filterButtonActive:hover,
+.filterButtonActive:focus-visible {
+  background-color: var(--color-accent);
+  color: var(--color-white);
+  border-color: var(--color-accent);
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   Desktop — allow wrapping instead of pure scroll
+   ========================================================================== */
+
+@media (min-width: 768px) {
+  .filterContainer {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}

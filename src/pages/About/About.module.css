@@ -1,0 +1,136 @@
+/* About Page — CSS Module */
+
+.section {
+  padding: var(--space-lg) var(--content-padding);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  min-height: calc(100vh - 200px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* Photo container */
+.photoContainer {
+  flex-shrink: 0;
+}
+
+.photo {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  box-shadow: var(--shadow-md);
+}
+
+/* Text content */
+.textContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.heading {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  margin: 0;
+  line-height: var(--line-height-tight);
+}
+
+.bio {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-secondary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* Contact section */
+.contactSection {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.contactHeading {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.contactEmail {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.contactEmail:hover {
+  opacity: 0.7;
+}
+
+/* Social links */
+.socialLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+  list-style: none;
+  padding: 0;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-secondary);
+  text-decoration: none;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.socialLink:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.socialIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* Desktop layout (≥ 768px) */
+@media (min-width: 768px) {
+  .content {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .photoContainer {
+    flex: 0 0 40%;
+    max-width: 400px;
+  }
+
+  .photo {
+    max-width: 100%;
+  }
+
+  .textContent {
+    flex: 1;
+  }
+}
