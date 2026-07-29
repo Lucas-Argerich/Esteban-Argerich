@@ -6,6 +6,21 @@ import { getPhotos, getCategories } from '../../../services/galleryService';
 import { validateImageFile } from '../../../utils/fileValidation';
 import styles from './GalleryManager.module.css';
 
+function getImageDimensions(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve({ width: img.naturalWidth, height: img.naturalHeight });
+      URL.revokeObjectURL(img.src);
+    };
+    img.onerror = () => {
+      resolve({ width: null, height: null });
+      URL.revokeObjectURL(img.src);
+    };
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 export default function GalleryManager() {
   const [photos, setPhotos] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -94,12 +109,15 @@ export default function GalleryManager() {
       try {
         const { url, storagePath } = await uploadImage(file);
 
+        // Read image dimensions
+        const { width, height } = await getImageDimensions(file);
+
         const photoData = {
           url,
           storagePath,
           uploadedAt: Timestamp.now(),
-          width: null,
-          height: null,
+          width,
+          height,
         };
 
         if (category) {
