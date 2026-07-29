@@ -118,25 +118,53 @@
   gap: var(--space-sm);
 }
 
+.galleryItem {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.galleryItem:hover {
+  transform: scale(1.02);
+}
+
 .galleryImage {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast);
-}
-
-.galleryImage:hover {
-  transform: scale(1.02);
-  cursor: pointer;
+  display: block;
 }
 
 .galleryVideo {
   width: 100%;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
   background: #000;
+}
+
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  transition: background var(--transition-fast);
+}
+
+.galleryItem:hover .playOverlay {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.playIcon {
+  width: 48px;
+  height: 48px;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 /* Lightbox */
@@ -156,6 +184,13 @@
   max-height: 90vh;
   object-fit: contain;
   border-radius: var(--radius-sm);
+}
+
+.lightboxVideo {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: var(--radius-sm);
+  outline: none;
 }
 
 .lightboxClose {

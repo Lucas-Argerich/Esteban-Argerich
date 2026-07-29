@@ -156,34 +156,44 @@ export default function WorkshopDetail() {
             <h2 className={styles.galleryTitle}>Galería</h2>
             <div className={styles.galleryGrid}>
               {workshop.images.map((media, idx) => (
-                media.type === 'video' ? (
-                  <video
-                    key={idx}
-                    src={media.url}
-                    className={styles.galleryVideo}
-                    controls
-                    preload="metadata"
-                  />
-                ) : (
-                  <img
-                    key={idx}
-                    src={media.url}
-                    alt={`${workshop.title} - imagen ${idx + 1}`}
-                    className={styles.galleryImage}
-                    loading="lazy"
-                    onClick={() => setLightboxIndex(idx)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => { if (e.key === 'Enter') setLightboxIndex(idx); }}
-                  />
-                )
+                <div
+                  key={idx}
+                  className={styles.galleryItem}
+                  onClick={() => setLightboxIndex(idx)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter') setLightboxIndex(idx); }}
+                >
+                  {media.type === 'video' ? (
+                    <>
+                      <video
+                        src={media.url}
+                        className={styles.galleryVideo}
+                        preload="metadata"
+                        muted
+                      />
+                      <div className={styles.playOverlay} aria-hidden="true">
+                        <svg viewBox="0 0 24 24" className={styles.playIcon}>
+                          <path d="M8 5v14l11-7z" fill="currentColor" />
+                        </svg>
+                      </div>
+                    </>
+                  ) : (
+                    <img
+                      src={media.url}
+                      alt={`${workshop.title} - imagen ${idx + 1}`}
+                      className={styles.galleryImage}
+                      loading="lazy"
+                    />
+                  )}
+                </div>
               ))}
             </div>
           </section>
         )}
 
-        {/* Lightbox (images only) */}
-        {lightboxIndex >= 0 && workshop.images && workshop.images[lightboxIndex]?.type !== 'video' && (
+        {/* Lightbox (images and videos) */}
+        {lightboxIndex >= 0 && workshop.images && (
           <div
             className={styles.lightboxOverlay}
             onClick={() => setLightboxIndex(-1)}
@@ -194,7 +204,7 @@ export default function WorkshopDetail() {
             }}
             tabIndex={0}
             role="dialog"
-            aria-label="Visor de imagen"
+            aria-label="Visor de galería"
             ref={(el) => el && el.focus()}
           >
             <button
@@ -215,12 +225,23 @@ export default function WorkshopDetail() {
               </button>
             )}
 
-            <img
-              src={workshop.images[lightboxIndex].url}
-              alt={`${workshop.title} - imagen ${lightboxIndex + 1}`}
-              className={styles.lightboxImage}
-              onClick={(e) => e.stopPropagation()}
-            />
+            {workshop.images[lightboxIndex]?.type === 'video' ? (
+              <video
+                key={lightboxIndex}
+                src={workshop.images[lightboxIndex].url}
+                className={styles.lightboxVideo}
+                controls
+                autoPlay
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              <img
+                src={workshop.images[lightboxIndex].url}
+                alt={`${workshop.title} - imagen ${lightboxIndex + 1}`}
+                className={styles.lightboxImage}
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
 
             {lightboxIndex < workshop.images.length - 1 && (
               <button
