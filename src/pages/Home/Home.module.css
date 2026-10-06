@@ -15,7 +15,6 @@
   height: 100vh;
   min-height: 500px;
   display: flex;
-  align-items: center;
   justify-content: center;
   overflow: hidden;
 }
@@ -41,6 +40,7 @@
 /* Text content centered over the hero */
 .heroContent {
   position: relative;
+  top: 240px;
   z-index: 2;
   text-align: center;
   padding: var(--space-sm);
